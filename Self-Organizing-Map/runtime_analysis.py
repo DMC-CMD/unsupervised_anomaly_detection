@@ -21,9 +21,9 @@ def run_inference(input_file, som, feature_values_per_file):
 
 
 if __name__ == "__main__":
-    # load the specific autoencoders you want to use for the runtime analysis
     executions = 20
 
+    # load the specific autoencoders you want to use for the runtime analysis
     with open('Models/Hydropower/base_model/model.pkl', 'rb') as file:
         tuned_model_hydropower = pickle.load(file)
     t = timeit.Timer(lambda : run_inference('../Features/Hydropower/normal_test_features.npy', tuned_model_hydropower, 64))

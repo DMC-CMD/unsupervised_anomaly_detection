@@ -34,7 +34,7 @@ def extract_features_from_file(audio_path):
 
     feature_vectors = np.column_stack((rms_energy, spectral_centroid, spectral_bandwidth, spectral_contrast, spectral_flatness, spectral_rolloff, zero_crossing_rate))
 
-    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=SAMPLE_RATE, n_fft=FRAME_SIZE, hop_length=hop_length, n_mels=MEL_AMOUNT)
+    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=SAMPLE_RATE, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH, n_mels=MEL_AMOUNT)
     mfccs = librosa.feature.mfcc(S=librosa.power_to_db(melspectrogram), sr=SAMPLE_RATE, n_mfcc=MEL_AMOUNT)
     mfccs = np.array(mfccs)
 

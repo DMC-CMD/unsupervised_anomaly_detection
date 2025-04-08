@@ -13,7 +13,6 @@ def run_inference(input_file, autoencoder):
     reconstructed_normals = transform_to_spectrogram(reconstructed_normals)
     normal_test = transform_to_spectrogram(normal_test)
 
-    print(reconstructed_normals.shape)
     threshold = 0.0016 # for the runtime evaluation, the specific threshold is not relevant and is therefore fixed
     classifications = []
     for i in range(len(reconstructed_normals)):
@@ -24,10 +23,9 @@ def run_inference(input_file, autoencoder):
             classifications.append(0)
 
 if __name__ == "__main__":
-    # load the autoencoder you want to use for the runtime analysis
     executions = 20
 
-
+    # load the autoencoder you want to use for the runtime analysis
     tuned_model_hydropower = AutoencoderDense.load('Models/Hydropower/21')
     t = timeit.Timer(lambda : run_inference('../Spectrograms/Hydropower/normal_test_spectrograms.npy', tuned_model_hydropower))
     r = t.repeat(executions, 1)

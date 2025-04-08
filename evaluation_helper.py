@@ -15,14 +15,9 @@ def display_training_process(history, title):
     plt.show(dpi=300)
 
 def get_labels_and_reconstruction_errors(normal_spectrograms, anomaly_spectrograms, reconstructed_normals, reconstructed_anomalies):
-    print('Normal spectrogram shape before: ', normal_spectrograms.shape)
     normal_spectrograms = transform_to_spectrogram(normal_spectrograms)
-    print('Normal spectrogram shape after: ', normal_spectrograms.shape)
-
     anomaly_spectrograms= transform_to_spectrogram(anomaly_spectrograms)
-    print('Reconstructed normal shape before: ', reconstructed_normals.shape)
     reconstructed_normals = transform_to_spectrogram(reconstructed_normals)
-    print('Reconstructed normal shape after: ', reconstructed_normals.shape)
     reconstructed_anomalies = transform_to_spectrogram(reconstructed_anomalies)
 
     reconstruction_errors = []

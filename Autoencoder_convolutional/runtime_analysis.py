@@ -13,7 +13,6 @@ def run_inference(input_file, autoencoder):
     reconstructed_normals = transform_to_spectrogram(reconstructed_normals)
     normal_test = transform_to_spectrogram(normal_test)
 
-    print(reconstructed_normals.shape)
     threshold = 0.0016 # for the runtime evaluation, the specific threshold is not relevant and is therefore fixed
     classifications = []
     for i in range(len(reconstructed_normals)):

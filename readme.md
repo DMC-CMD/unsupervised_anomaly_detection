@@ -13,8 +13,7 @@ The project needs the following dependencies to be run:
 - Scikit-learn
 - Matplotlib
 - MiniSom
-- Tensorflow.Keras
-- Keras
+- Tensorflow
 
 ## Datasets
 This source code uses two datasets to train and evaluate the implemented models. 

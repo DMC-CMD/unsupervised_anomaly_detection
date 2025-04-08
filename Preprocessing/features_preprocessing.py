@@ -41,9 +41,7 @@ def preprocess_anomaly_features(input_folder, output_folder):
     anomaly_features = feature_normalization(anomaly_features)
 
     anomaly_validation_features, anomaly_test_features = train_test_split(anomaly_features, test_size=0.5)
-    print('Normal train features shape after:', anomaly_validation_features.shape)
     anomaly_validation_features = file_format_to_frame_format(anomaly_validation_features)
-    print('Normal train features shape after:', anomaly_validation_features.shape)
 
     anomaly_test_features = file_format_to_frame_format(anomaly_test_features)
 
