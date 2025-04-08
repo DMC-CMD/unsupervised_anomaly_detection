@@ -2,17 +2,19 @@ import librosa.feature
 import numpy as np
 import os
 import sys
+from constants import SAMPLE_RATE, HOP_LENGTH, FRAME_SIZE, MEL_AMOUNT
+
 
 def extract_features_from_file(audio_path):
-    signal, sr = librosa.load(audio_path, sr=22050)
+    signal, sr = librosa.load(audio_path, sr=SAMPLE_RATE)
 
-    rms_energy = librosa.feature.rms(y=signal, frame_length=1024, hop_length=256)
+    rms_energy = librosa.feature.rms(y=signal, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)
     rms_energy = np.array(rms_energy[0])
 
-    zero_crossing_rate = librosa.feature.zero_crossing_rate(y=signal, frame_length=1024, hop_length=256)
+    zero_crossing_rate = librosa.feature.zero_crossing_rate(y=signal, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)
     zero_crossing_rate = np.array(zero_crossing_rate[0])
 
-    stft = librosa.stft(signal, n_fft=1024, hop_length=256)
+    stft = librosa.stft(signal, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)
     stft = np.abs(stft)
 
     spectral_centroid = librosa.feature.spectral_centroid(S=stft)
@@ -32,8 +34,8 @@ def extract_features_from_file(audio_path):
 
     feature_vectors = np.column_stack((rms_energy, spectral_centroid, spectral_bandwidth, spectral_contrast, spectral_flatness, spectral_rolloff, zero_crossing_rate))
 
-    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=sr, n_fft=1024, hop_length=256, n_mels=64)
-    mfccs = librosa.feature.mfcc(S=librosa.power_to_db(melspectrogram), sr=sr, n_mfcc=64)
+    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=SAMPLE_RATE, n_fft=FRAME_SIZE, hop_length=hop_length, n_mels=MEL_AMOUNT)
+    mfccs = librosa.feature.mfcc(S=librosa.power_to_db(melspectrogram), sr=SAMPLE_RATE, n_mfcc=MEL_AMOUNT)
     mfccs = np.array(mfccs)
 
     for mfcc in mfccs:
@@ -81,15 +83,6 @@ def file_format_to_frame_format(file_features):
     frame_features = np.array(frame_features)
 
     return frame_features
-
-def frame_format_to_file_format(frame_features, feature_values_per_file):
-    file_features = []
-
-    for i in range(0, len(frame_features), feature_values_per_file):
-        file = frame_features[i:i+feature_values_per_file]
-        file_features.append(file)
-
-    return file_features
 
 
 def save_to_file(path, data):

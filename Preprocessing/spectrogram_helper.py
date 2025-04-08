@@ -4,10 +4,7 @@ import os
 import numpy as np
 import sys
 
-FRAME_SIZE = 1024
-HOP_LENGTH = 256
-SAMPLE_RATE = 22050
-MEL_AMOUNT = 64
+from constants import SAMPLE_RATE, FRAME_SIZE, HOP_LENGTH, MEL_AMOUNT
 
 def extract_melspectrograms(input_dir):
     spectrograms = []

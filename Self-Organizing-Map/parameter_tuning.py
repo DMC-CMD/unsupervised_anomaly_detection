@@ -8,12 +8,6 @@ import math
 from implementation import train_som, save_som
 from parameter_tuning_helper import get_auc_validation_score_for_som
 
-parameter_ranges = {
-    'sidelength': [8, 20],
-    'sigma': [1, 20],
-    'learning_rate': [0.1, 1.5],
-    'num_epochs': [2, 10]
-}
 
 def generate_random_parameters(parameter_ranges):
     sidelength = random.randrange(parameter_ranges['sidelength'][0], parameter_ranges['sidelength'][1])
@@ -27,7 +21,7 @@ def generate_random_parameters(parameter_ranges):
     return sidelength, sigma, num_epochs, learning_rate
 
 #integrates generation of report directly, since MiniSOM doesn't allow to
-def random_parameter_tuning(rounds, dataset):
+def random_parameter_tuning(parameter_ranges, rounds, dataset):
 
     for round in range(rounds):
         sys.stdout.write(f'\r Tuning round: {round+1}/{rounds}')
@@ -47,7 +41,7 @@ def create_models_report(models_folder, report_file_path):
 
     with open(report_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Model', 'sidelength', 'sigma', 'num_epochs', 'learning_rate', 'roc_auc_score'])
+        writer.writerow(['Model', 'sidelength', 'sigma', 'num_epochs', 'learning_rate', 'validation roc_auc_score'])
 
         for _, dirs, _ in os.walk(models_folder):
             counter = 0
@@ -73,10 +67,19 @@ def create_models_report(models_folder, report_file_path):
             print('') # used to keep the last print from sys.stdout.write
 
 if __name__ == '__main__':
-    #random_parameter_tuning(100, 'Hydropower')
-    #create_models_report('Models/Hydropower', 'Models_report_hydropower_som.csv')
+    parameter_ranges = {
+        'sidelength': [8, 20],
+        'sigma': [1, 20],
+        'learning_rate': [0.1, 1.5],
+        'num_epochs': [2, 10]
+    }
 
-    #random_parameter_tuning(100, 'MIMII')
+    rounds = 100
+
+    random_parameter_tuning(parameter_ranges, rounds,'Hydropower')
+    create_models_report('Models/Hydropower', 'Models_report_hydropower_som.csv')
+
+    random_parameter_tuning(parameter_ranges, rounds, 'MIMII')
     create_models_report('Models/MIMII', 'Models_report_mimii_som.csv')
 
 

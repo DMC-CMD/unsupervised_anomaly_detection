@@ -1,15 +1,13 @@
 from keras.src.losses import MeanSquaredError
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, \
     Flatten, Dense, Reshape, Conv2DTranspose, Activation
-from tensorflow.keras import backend as keras_backend
-from tensorflow.keras import Model
-import numpy as np
 from tensorflow.keras.optimizers import Adam
 import os
 import pickle
 
 
-class AutoencoderLinear:
+class AutoencoderDense:
     def __init__(self, input_shape, layer_output_sizes, bottleneck_size):
         self._input_shape = input_shape
         self._layer_output_sizes = layer_output_sizes
@@ -38,8 +36,8 @@ class AutoencoderLinear:
         layers = flatten(encoder_input)
         for layer_index in range(self._layer_amount):
             layer_number = layer_index + 1
-            linear_layer = Dense(self._layer_output_sizes[layer_index], name='encoder_fully_connected_layer_' + str(layer_number))
-            layers = linear_layer(layers)
+            dense_layer = Dense(self._layer_output_sizes[layer_index], name='encoder_fully_connected_layer_' + str(layer_number))
+            layers = dense_layer(layers)
             relu_layer = ReLU(name='encoder_relu_layer_' + str(layer_number))
             layers = relu_layer(layers)
 
@@ -52,18 +50,18 @@ class AutoencoderLinear:
         layers = decoder_input
         for layer_index in reversed(range(0, self._layer_amount)):
             layer_number = self._layer_amount - layer_index
-            linear_layer = Dense(self._layer_output_sizes[layer_index], name='decoder_fully_connected_layer_' + str(layer_number))
-            layers = linear_layer(layers)
+            dense_layer = Dense(self._layer_output_sizes[layer_index], name='decoder_fully_connected_layer_' + str(layer_number))
+            layers = dense_layer(layers)
             relu_layer = ReLU(name='decoder_relu_layer_' + str(layer_number))
             layers = relu_layer(layers)
 
-        linear_layer = Dense(self._flattened_input_size)
-        layers = linear_layer(layers)
+        dense_layer = Dense(self._flattened_input_size)
+        layers = dense_layer(layers)
 
         sigmoid = Activation("sigmoid", name="sigmoid_layer")
         layers = sigmoid(layers)
 
-        output_layer = (Reshape(self._input_shape)(layers))
+        output_layer = Reshape(self._input_shape)(layers)
         self._decoder = Model(decoder_input, output_layer, name='decoder')
 
 
@@ -152,7 +150,7 @@ class AutoencoderLinear:
         hyperparameters_file_path = os.path.join(save_folder, ".parameters.pkl")
         with open(hyperparameters_file_path, "rb") as file:
             hyperparameters = pickle.load(file)
-        autoencoder = AutoencoderLinear(*hyperparameters)
+        autoencoder = AutoencoderDense(*hyperparameters)
 
         train_parameters_file_path = os.path.join(save_folder, ".train_parameters.pkl")
         with open(train_parameters_file_path, "rb") as file:

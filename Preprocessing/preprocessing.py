@@ -2,8 +2,6 @@ from Preprocessing.spectrogram_preprocessing import preprocess_normal_spectrogra
     preprocess_anomaly_spectrograms, zero_padding_frequency_bands
 from features_preprocessing import preprocess_normal_features, preprocess_anomaly_features
 
-import numpy as np
-
 
 hydropower_input_folder = '../HPP_dataset'
 

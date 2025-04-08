@@ -2,6 +2,7 @@ from sklearn.metrics import roc_curve, auc, RocCurveDisplay, mean_squared_error,
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
+from collections import Counter
 
 
 def display_training_process(history, title):
@@ -14,9 +15,14 @@ def display_training_process(history, title):
     plt.show(dpi=300)
 
 def get_labels_and_reconstruction_errors(normal_spectrograms, anomaly_spectrograms, reconstructed_normals, reconstructed_anomalies):
+    print('Normal spectrogram shape before: ', normal_spectrograms.shape)
     normal_spectrograms = transform_to_spectrogram(normal_spectrograms)
+    print('Normal spectrogram shape after: ', normal_spectrograms.shape)
+
     anomaly_spectrograms= transform_to_spectrogram(anomaly_spectrograms)
+    print('Reconstructed normal shape before: ', reconstructed_normals.shape)
     reconstructed_normals = transform_to_spectrogram(reconstructed_normals)
+    print('Reconstructed normal shape after: ', reconstructed_normals.shape)
     reconstructed_anomalies = transform_to_spectrogram(reconstructed_anomalies)
 
     reconstruction_errors = []
@@ -68,17 +74,9 @@ def display_roc(true_labels, predicted_score, title, model_name):
                               estimator_name=model_name)
     display.plot()
     plt.title(title)
-    plt.savefig('roc_lae_mimii', dpi=300)
+    plt.show()
 
-def get_minimal_anomaly_score(true_labels, predicted_score):
-    min_score = np.min(predicted_score)
-    for i in range(len(true_labels)):
-        if true_labels[i] == 1:
-            if predicted_score[i] < min_score:
-                min_score = predicted_score[i]
-    return min_score
-
-def display_reconstruction_errors(true_labels, predicted_scores, title, normal_color='g', anomaly_color='r', ):
+def display_error_plot(true_labels, predicted_scores, title, y_label, normal_color='g', anomaly_color='r', ):
     scores_sorted, labels_sorted = sort_labeled_data(true_labels, predicted_scores)
     colors = [normal_color if x == 0 else anomaly_color for x in labels_sorted]
 
@@ -91,10 +89,17 @@ def display_reconstruction_errors(true_labels, predicted_scores, title, normal_c
 
     plt.title(title)
     plt.xlabel('Sample Number')
-    plt.ylabel('Reconstruction error')
-    plt.savefig('reconstruction_errors_lae_hydropower', dpi=300)
+    plt.ylabel(y_label)
+    plt.show()
 
+def frame_format_to_file_format(frame_features, feature_values_per_file):
+    file_features = []
 
+    for i in range(0, len(frame_features), feature_values_per_file):
+        file = frame_features[i:i+feature_values_per_file]
+        file_features.append(file)
+
+    return np.array(file_features)
 
 def sort_labeled_data(true_labels, predicted_scores):
     labels_sorted = [x for _, x in sorted(zip(predicted_scores, true_labels))]
@@ -106,11 +111,6 @@ def get_auc_score(true_labels, predicted_score):
     roc_auc = auc(fpr, tpr)
     return roc_auc
 
-def get_minimal_anomaly_score(true_labels, predicted_scores, anomaly_label=1):
-    scores_sorted, labels_sorted = sort_labeled_data(true_labels, predicted_scores)
-    for i in range(len(scores_sorted)):
-        if labels_sorted[i] == anomaly_label:
-            return scores_sorted[i]
 
 def display_confusion_matrix(true_labels, predicted_scores, threshold, title):
     predictions = [1 if predicted_score >= threshold else 0 for predicted_score in predicted_scores]
@@ -120,5 +120,23 @@ def display_confusion_matrix(true_labels, predicted_scores, threshold, title):
     plt.title(title)
     plt.show(dpi=300)
 
+def display_hit_map(som, sidelenght, train_frames, title):
+    bmu_list = [som.winner(x) for x in train_frames]
+    bmu_counts = Counter(bmu_list)
 
+    hit_map = np.zeros((sidelenght, sidelenght))
+    for (x, y), count in bmu_counts.items():
+        hit_map[x, y] = count
 
+    plt.figure(figsize=(8, 8))
+    plt.pcolor(hit_map, cmap='Blues')
+    plt.colorbar(label="BMU Hits")
+    plt.title(title)
+    plt.show()
+
+def display_distance_map(som, title):
+    plt.figure(figsize=(8, 8))
+    plt.pcolor(som.distance_map().T, cmap='gist_yarg')
+    plt.title(title)
+    plt.colorbar()
+    plt.show()

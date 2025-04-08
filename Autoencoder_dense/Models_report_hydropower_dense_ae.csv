@@ -1,4 +1,4 @@
-Model,first_layer_output_size,bottleneck_size,batch_size,epochs,roc_auc_score
+Model,first_layer_output_size,bottleneck_size,batch_size,epochs,validation roc_auc_score
 0,64,8,64,25,0.99463133640553
 1,256,32,16,35,0.9998617511520737
 10,256,4,128,85,0.9994700460829493

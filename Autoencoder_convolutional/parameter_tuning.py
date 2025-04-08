@@ -8,13 +8,7 @@ from autoencoder_convolutional import AutoencoderConvolutional
 from parameter_tuning_helper import get_auc_validation_score_for_ae, random_power_of_two
 from implementation import train_conv_ae
 
-parameter_ranges = {
-    'first_layer_filter_amount': [4, 128],
-    'bottleneck_size': [4, 128],
 
-    'batch_size': [8, 128],
-    'epochs': [5, 100]
-}
 
 def generate_random_parameters(parameter_ranges):
     first_layer_filter_amount = random_power_of_two(parameter_ranges['first_layer_filter_amount'][0], parameter_ranges['first_layer_filter_amount'][1])
@@ -46,7 +40,7 @@ def create_models_report(models_folder, report_file_path):
 
     with open(report_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Model', 'first_layer_filter_amount', 'bottleneck_size', 'batch_size', 'epochs', 'roc_auc_score'])
+        writer.writerow(['Model', 'first_layer_filter_amount', 'bottleneck_size', 'batch_size', 'epochs', 'validation roc_auc_score'])
 
         for _, dirs, _ in os.walk(models_folder):
             counter = 0
@@ -67,31 +61,22 @@ def create_models_report(models_folder, report_file_path):
 
 
 
-
-
-def get_best_models(auc_scores):
-    if np.max(auc_scores) < 1:
-        best_model = int(np.argmin(auc_scores))
-        if best_model == len(auc_scores)-1:
-            best_model = 'base_model'
-        return [str(best_model)]
-
-    models = []
-    for i in range(len(auc_scores)-1):
-        if auc_scores[i] == 1:
-            models.append(str(i))
-
-    if auc_scores[-1] == 1:
-        models.append('base_model')
-    return models
-
-
 if __name__ == '__main__':
-    #random_parameter_tuning(parameter_ranges, 100, dataset='Hydropower')
+    parameter_ranges = {
+        'first_layer_filter_amount': [4, 128],
+        'bottleneck_size': [4, 128],
+
+        'batch_size': [8, 128],
+        'epochs': [5, 100]
+    }
+
+    rounds = 100
+
+    random_parameter_tuning(parameter_ranges, rounds, dataset='Hydropower')
     create_models_report('Models/Hydropower', 'Models_report_hydropower_conv_ae.csv')
 
-    #random_parameter_tuning(parameter_ranges, 100, dataset='MIMII')
-    #create_models_report('Models/MIMII', 'Models_report_mimii_conv_ae.csv')
+    random_parameter_tuning(parameter_ranges, rounds, dataset='MIMII')
+    create_models_report('Models/MIMII', 'Models_report_mimii_conv_ae.csv')
 
 
 

@@ -1,16 +1,16 @@
 import numpy as np
 
-from autoencoder_linear import AutoencoderLinear
+from autoencoder_dense import AutoencoderDense
 from evaluation_helper import display_training_process
 
 
-def train_linear_ae(first_layer_output_size, bottleneck_size, batch_size, epochs, dataset, verbose=False):
+def train_dense_ae(first_layer_output_size, bottleneck_size, batch_size, epochs, dataset, verbose=False):
     input_dir = f'../Spectrograms/{dataset}'
     normal_train = np.load(input_dir + '/normal_train_spectrograms.npy')
     normal_validation = np.load(input_dir + '/normal_validation_spectrograms.npy')
     input_shape = normal_train[0].shape
 
-    autoencoder = AutoencoderLinear(
+    autoencoder = AutoencoderDense(
         input_shape=input_shape,
         layer_output_sizes=(
             first_layer_output_size,
@@ -33,17 +33,16 @@ def train_linear_ae(first_layer_output_size, bottleneck_size, batch_size, epochs
 
 if __name__ == '__main__':
 
-    linear_ae_hydropower = train_linear_ae(64, 8, 64, 10, dataset='Hydropower', verbose=True)
-    linear_ae_hydropower.summary()
-    linear_ae_hydropower.save('Models/Hydropower/base_model')
-    display_training_process(linear_ae_hydropower.get_history(), 'Linear AE training with Hydropower data')
+    dense_ae_hydropower = train_dense_ae(64, 8, 64, 10, dataset='Hydropower', verbose=True)
+    dense_ae_hydropower.summary()
+    dense_ae_hydropower.save('Models/Hydropower/base_model')
+    display_training_process(dense_ae_hydropower.get_history(), 'Dense AE training with Hydropower data')
 
 
-   
-    linear_ae_mimii = train_linear_ae(64, 8, 64, 75, dataset='MIMII', verbose=True)
-    linear_ae_mimii.summary()
-    linear_ae_mimii.save('Models/MIMII/base_model')
-    display_training_process(linear_ae_mimii.get_history(), 'Linear AE training with MIMII data')
-    
+    dense_ae_mimii = train_dense_ae(64, 8, 64, 75, dataset='MIMII', verbose=True)
+    dense_ae_mimii.summary()
+    dense_ae_mimii.save('Models/MIMII/base_model')
+    display_training_process(dense_ae_mimii.get_history(), 'Dense AE training with MIMII data')
+
 
 

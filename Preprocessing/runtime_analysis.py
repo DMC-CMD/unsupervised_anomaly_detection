@@ -1,13 +1,12 @@
 import os
 import timeit
-
 import librosa
 import sys
 import numpy as np
 
 from Preprocessing.features_helper import extract_features_from_file, feature_normalization, file_format_to_frame_format
 from Preprocessing.spectrogram_helper import normalize_spectrograms, transform_to_input_shape, \
-    zero_padding_frequency_bands_file
+    zero_padding_time_bands_file
 
 
 def extract_150_melspectrograms(input_dir):
@@ -39,9 +38,9 @@ def run_spectrogram_preprocessing(input_dir):
     melspectrograms = transform_to_input_shape(melspectrograms)
     np.save('dummy.npy', melspectrograms)
 
-def run_mimii_preprocessing(input_dir):
+def run_mimii_spectrogram_preprocessing(input_dir):
     run_spectrogram_preprocessing(input_dir)
-    zero_padding_frequency_bands_file('dummy.npy')
+    zero_padding_time_bands_file('dummy.npy')
 
 def extract_features_150_files(input_dir):
     features = np.array([[[]]])
@@ -74,23 +73,27 @@ def run_feature_preprocessing(input_dir):
 
 if __name__ == '__main__':
     executions = 20
-    '''
-    total_runtime_hp = timeit.timeit(lambda: run_spectrogram_preprocessing('../HPP_dataset/normal'), number=executions)
-    runtime_per_execution_hp = total_runtime_hp / executions
-    print('Average runtime (s) to preprocess 150 Hydropower spectrograms: ', runtime_per_execution_hp)
 
-    total_runtime_mimii = timeit.timeit(lambda: run_mimii_preprocessing('../MIMII_dataset/pump/id_00/normal'), number=executions)
-    runtime_per_execution_mimii = total_runtime_mimii / executions
-    print('Average runtime (s) to preprocess 150 MIMII spectrograms: ', runtime_per_execution_mimii)
-    '''
 
-    total_runtime_hp = timeit.timeit(lambda: run_feature_preprocessing('../HPP_dataset/normal'), number=executions)
-    runtime_per_execution_hp = total_runtime_hp / executions
-    print('Average runtime (s) to extract features from 150 Hydropower files: ', runtime_per_execution_hp)
+    t = timeit.Timer(lambda: run_spectrogram_preprocessing('../HPP_dataset/normal'))
+    r = t.repeat(executions, 1)
+    print('Best runtime (s) to preprocess 150 Hydropower spectrograms: ', min(r))
+    
+    t = timeit.Timer(lambda: run_mimii_spectrogram_preprocessing('../MIMII_dataset/pump/id_00/normal'))
+    r = t.repeat(executions, 1)
+    print('Best runtime (s) to preprocess 150 MIMII spectrograms: ', min(r))
 
-    total_runtime_mimii = timeit.timeit(lambda: run_feature_preprocessing('../MIMII_dataset/pump/id_00/normal'), number=executions)
-    runtime_per_execution_mimii = total_runtime_mimii / executions
-    print('Average runtime (s) to extract features from 150 MIMII files: ', runtime_per_execution_mimii)
+    t = timeit.Timer(lambda: run_feature_preprocessing('../HPP_dataset/normal'))
+    r = t.repeat(executions, 1)
+    print('Best runtime (s) to extract features from 150 Hydropower files: ', min(r))
+
+    t = timeit.Timer(lambda: run_feature_preprocessing('../MIMII_dataset/pump/id_00/normal'))
+    r = t.repeat(executions, 1)
+    print('Best runtime (s) to extract features from 150 MIMII files: ', min(r))
+
+
+
+
 
 
 

@@ -10,7 +10,7 @@ def train_conv_ae(first_layer_filter_amount, bottleneck_size, batch_size, epochs
 
     autoencoder = AutoencoderConvolutional(
         input_shape=normal_train_spectrograms[0].shape,
-        filter_amount=(
+        filter_amounts=(
             first_layer_filter_amount,
             first_layer_filter_amount*2,
             first_layer_filter_amount*4
@@ -36,10 +36,12 @@ def train_conv_ae(first_layer_filter_amount, bottleneck_size, batch_size, epochs
 
 if __name__ == '__main__':
 
+
     conv_autoencoder_hydropower = train_conv_ae(16, 64, 64, 25, 'Hydropower', verbose=True)
     conv_autoencoder_hydropower.save('Models/Hydropower/base_model')
     conv_autoencoder_hydropower.summary()
     display_training_process(conv_autoencoder_hydropower.get_history(), title='Convolutional AE Training with Hydropower data')
+
 
     conv_autoencoder_mimii = train_conv_ae( 16, 64, 64, 75, 'Mimii', verbose=True)
     conv_autoencoder_mimii.save('Models/MIMII/base_model')

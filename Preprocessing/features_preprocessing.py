@@ -1,15 +1,8 @@
 import os
 from sklearn.model_selection import train_test_split
 
-from Preprocessing.spectrogram_helper import transform_to_input_shape
 from features_helper import extract_features_from_folder, file_format_to_frame_format, feature_normalization, save_to_file
 
-## Performs the following steps:
-# 1. extract the features for each sample in a given folder
-# 2. feature-wise normalization
-# 2. perform train, test, validation split for the normal samples
-# 3. transform from sample representation to frame representation
-# 4. store to disk
 
 def create_folder_if_not_exists(folder):
     if not os.path.exists(folder):
@@ -41,7 +34,6 @@ def preprocess_normal_features(input_folder, output_folder):
 def preprocess_anomaly_features(input_folder, output_folder):
     create_folder_if_not_exists(output_folder)
 
-    #output path
     anomaly_validation_path = output_folder + '/anomaly_validation_features.npy'
     anomaly_test_path = output_folder + '/anomaly_test_features.npy'
 
@@ -55,7 +47,6 @@ def preprocess_anomaly_features(input_folder, output_folder):
 
     anomaly_test_features = file_format_to_frame_format(anomaly_test_features)
 
-    #save_to_file(anomaly_validation_path, anomaly_validation_features)
-    #save_to_file(anomaly_test_path, anomaly_test_features)
+    save_to_file(anomaly_validation_path, anomaly_validation_features)
+    save_to_file(anomaly_test_path, anomaly_test_features)
 
-preprocess_anomaly_features('../MIMII_dataset/pump/id_00/abnormal', '../Features')

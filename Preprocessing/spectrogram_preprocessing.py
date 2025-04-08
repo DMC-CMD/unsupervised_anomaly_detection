@@ -2,7 +2,8 @@ import os
 from sklearn.model_selection import train_test_split
 
 from Preprocessing.spectrogram_helper import extract_melspectrograms, normalize_spectrograms, transform_to_input_shape, \
-    zero_padding_frequency_bands_file, save_to_file
+    zero_padding_time_bands_file, save_to_file
+
 
 def create_folder_if_not_exists(folder):
     if not os.path.exists(folder):
@@ -37,4 +38,4 @@ def zero_padding_frequency_bands(folder):
     for _, _, files in os.walk(folder):
         for file in files:
             full_path = os.path.join(folder, file)
-            zero_padding_frequency_bands_file(full_path)
+            zero_padding_time_bands_file(full_path)

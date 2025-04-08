@@ -1,8 +1,8 @@
 from keras.src.losses import MeanSquaredError
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, \
     Flatten, Dense, Reshape, Conv2DTranspose, Activation
 from tensorflow.keras import backend as keras_backend
-from tensorflow.keras import Model
 import numpy as np
 from tensorflow.keras.optimizers import Adam
 import os
@@ -10,10 +10,10 @@ import pickle
 
 
 class AutoencoderConvolutional:
-    def __init__(self, input_shape, filter_sizes, filter_amount, strides, bottleneck_size):
+    def __init__(self, input_shape, filter_sizes, filter_amounts, strides, bottleneck_size):
         self._input_shape = input_shape
         self._filter_sizes = filter_sizes
-        self._filter_amounts = filter_amount
+        self._filter_amounts = filter_amounts
         self._strides = strides
         self._bottleneck_size = bottleneck_size
 
@@ -193,6 +193,5 @@ class AutoencoderConvolutional:
     def _load_weights(self, weights_file_path):
         self._model.load_weights(weights_file_path)
 
-    def predict(self, data, verbose):
-        verbose = 1 if verbose else 0
+    def predict(self, data, verbose=0):
         return self._model.predict(data, verbose=verbose)
