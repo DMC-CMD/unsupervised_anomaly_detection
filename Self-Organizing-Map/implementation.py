@@ -63,7 +63,7 @@ if __name__ == '__main__':
     normal_train = np.load(f'../Features/Hydropower/normal_train_features.npy')
     display_hit_map(som_hydropower, sidelength_h, normal_train, 'Hit map')
 
-    '''
+
     sidelength_m = 12
     sigma_m = 15
     learning_rate_m = 0.5
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     normal_train = np.load(f'../Features/MIMII/normal_train_features.npy')
     display_hit_map(som_mimii, sidelength_m, normal_train, 'Hit map MIMII')
-    '''
+
 
 
 

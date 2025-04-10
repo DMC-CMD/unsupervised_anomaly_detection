@@ -1,4 +1,4 @@
-# Acoustic Anomaly Detection in Hydropower Plants.
+# Acoustic Anomaly Detection in Hydropower Plants
 
 
 ## Introduction
@@ -37,7 +37,10 @@ For each model type, there is a directory containing the following files:
 - 'inference_hydropower.py' creates evaluation plots and prints the ROC_AUC score for the hydropower base model.
 - 'inference_mimii.py' the same for the MIMII base model
 - 'parameter_tuning.py' runs hyperparameter tuning for the number of rounds specified within the specified parameter ranges and saves the models in the directory 'Models'. 
-- 'runtime_analysis.py' measures the inference runtime for the specified models
+
+## 3. Runtime Analysis
+Each model type has a 'runtime_analysis.py' file to measure the inference runtime for the specified models using 150 spectrogram/feature samples.
+Additionally, the preprocessing directory has another 'runtime_analysis.py' file to measure the runtime to preprocess 150 audio samples. 
 
 
 
