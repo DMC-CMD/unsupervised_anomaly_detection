@@ -41,7 +41,7 @@ def create_models_report(models_folder, report_file_path):
 
     with open(report_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Model', 'sidelength', 'sigma', 'num_epochs', 'learning_rate', 'validation roc_auc_score'])
+        writer.writerow(['Model', 'sidelength', 'sigma', 'num_epochs', 'learning_rate', 'validation_roc_auc_score'])
 
         for _, dirs, _ in os.walk(models_folder):
             counter = 0
@@ -76,10 +76,10 @@ if __name__ == '__main__':
 
     rounds = 100
 
-    random_parameter_tuning(parameter_ranges, rounds,'Hydropower')
+    #random_parameter_tuning(parameter_ranges, rounds,'Hydropower')
     create_models_report('Models/Hydropower', 'Models_report_hydropower_som.csv')
 
-    random_parameter_tuning(parameter_ranges, rounds, 'MIMII')
+    #random_parameter_tuning(parameter_ranges, rounds, 'MIMII')
     create_models_report('Models/MIMII', 'Models_report_mimii_som.csv')
 
 
