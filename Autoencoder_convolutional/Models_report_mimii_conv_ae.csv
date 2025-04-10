@@ -1,5 +1,5 @@
-Model,first_layer_filter_amount,bottleneck_size,batch_size,epochs,validation roc_auc_score
-0,32,8,32,20,0.6874358735192614
+Model,first_layer_number_of_filters,bottleneck_size,batch_size,epochs,validation roc_auc_score
+0,4,128,32,45,0.6539501912135063
 1,4,128,128,40,0.3571495196343625
 10,128,32,128,95,0.6911668687622423
 11,16,4,8,40,0.7603768305195411
@@ -99,4 +99,4 @@ Model,first_layer_filter_amount,bottleneck_size,batch_size,epochs,validation roc
 97,4,4,64,75,0.5138513198395672
 98,32,64,8,45,0.7073966980692099
 99,4,8,16,85,0.7342598638186736
-base_model,16,64,64,75,0.6831452289898331
+base_model,16,64,64,75,0.7252122003544446

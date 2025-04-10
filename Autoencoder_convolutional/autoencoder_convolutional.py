@@ -10,14 +10,14 @@ import pickle
 
 
 class AutoencoderConvolutional:
-    def __init__(self, input_shape, filter_sizes, filter_amounts, strides, bottleneck_size):
+    def __init__(self, input_shape, filter_sizes, numbers_of_filters, strides, bottleneck_size):
         self._input_shape = input_shape
         self._filter_sizes = filter_sizes
-        self._filter_amounts = filter_amounts
+        self._number_of_filters = numbers_of_filters
         self._strides = strides
         self._bottleneck_size = bottleneck_size
 
-        self._layer_amount = len(self._filter_amounts)
+        self._number_of_layers = len(self._number_of_filters)
         self._shape_before_bottleneck = None
         self._train_history = None
         self._batch_size = None
@@ -37,7 +37,7 @@ class AutoencoderConvolutional:
     def _build_encoder(self):
         encoder_input = Input(shape=self._input_shape, name='encoder_input')
         layers = encoder_input
-        for layer_index in range(self._layer_amount):
+        for layer_index in range(self._number_of_layers):
             layers = self._append_convolutional_layer(layer_index, layers)
 
         self._shape_before_bottleneck = keras_backend.int_shape(layers)[1:]
@@ -48,7 +48,7 @@ class AutoencoderConvolutional:
     def _append_convolutional_layer(self, layer_index, layers):
         layer_number = layer_index + 1
         conv_layer = Conv2D(
-            filters=self._filter_amounts[layer_index],
+            filters=self._number_of_filters[layer_index],
             kernel_size=self._filter_sizes[layer_index],
             strides=self._strides[layer_index],
             padding='same',
@@ -61,11 +61,11 @@ class AutoencoderConvolutional:
 
     def _build_decoder(self):
         decoder_input = Input(shape=(self._bottleneck_size,), name='decoder_input')
-        neuron_amount = np.prod(self._shape_before_bottleneck)
-        layers = Dense(neuron_amount, name='decoder_dense')(decoder_input)
+        number_of_neurons = np.prod(self._shape_before_bottleneck)
+        layers = Dense(number_of_neurons, name='decoder_dense')(decoder_input)
         layers = Reshape(target_shape=self._shape_before_bottleneck)(layers)
 
-        for layer_index in reversed(range(1, self._layer_amount)):
+        for layer_index in reversed(range(1, self._number_of_layers)):
             layers = self._append_conv_transpose_layer(layer_index, layers)
 
         convolutional_transpose_layer = Conv2DTranspose(
@@ -81,9 +81,9 @@ class AutoencoderConvolutional:
         self._decoder = Model(decoder_input, layers, name='decoder')
 
     def _append_conv_transpose_layer(self, layer_index, layers):
-        layer_number = self._layer_amount - layer_index
+        layer_number = self._number_of_layers - layer_index
         conv_transpose_layer = Conv2DTranspose(
-            filters=self._filter_amounts[layer_index],
+            filters=self._number_of_filters[layer_index],
             kernel_size=self._filter_sizes[layer_index],
             strides=self._strides[layer_index],
             padding='same',
@@ -138,7 +138,7 @@ class AutoencoderConvolutional:
         parameters = [
             self._input_shape,
             self._filter_sizes,
-            self._filter_amounts,
+            self._number_of_filters,
             self._strides,
             self._bottleneck_size
         ]
@@ -150,7 +150,7 @@ class AutoencoderConvolutional:
             pickle.dump(parameters, file)
 
     def get_hyperparameters(self):
-        return self._filter_amounts, self._bottleneck_size
+        return self._number_of_filters, self._bottleneck_size
 
     def _save_train_parameters(self, save_folder):
         train_parameters = [

@@ -13,7 +13,7 @@ class AutoencoderDense:
         self._layer_output_sizes = layer_output_sizes
         self._bottleneck_size = bottleneck_size
 
-        self._layer_amount = len(self._layer_output_sizes)
+        self._number_of_layers = len(self._layer_output_sizes)
         self._flattened_input_size = input_shape[0] * input_shape[1]
         self._train_history = None
         self._batch_size = None
@@ -34,7 +34,7 @@ class AutoencoderDense:
         encoder_input = Input(shape=self._input_shape, name='encoder_input')
         flatten = Flatten()
         layers = flatten(encoder_input)
-        for layer_index in range(self._layer_amount):
+        for layer_index in range(self._number_of_layers):
             layer_number = layer_index + 1
             dense_layer = Dense(self._layer_output_sizes[layer_index], name='encoder_fully_connected_layer_' + str(layer_number))
             layers = dense_layer(layers)
@@ -48,8 +48,8 @@ class AutoencoderDense:
     def _build_decoder(self):
         decoder_input = Input(shape=(self._bottleneck_size, ), name='decoder_input')
         layers = decoder_input
-        for layer_index in reversed(range(0, self._layer_amount)):
-            layer_number = self._layer_amount - layer_index
+        for layer_index in reversed(range(0, self._number_of_layers)):
+            layer_number = self._number_of_layers - layer_index
             dense_layer = Dense(self._layer_output_sizes[layer_index], name='decoder_fully_connected_layer_' + str(layer_number))
             layers = dense_layer(layers)
             relu_layer = ReLU(name='decoder_relu_layer_' + str(layer_number))

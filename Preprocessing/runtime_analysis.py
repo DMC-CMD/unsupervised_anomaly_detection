@@ -12,7 +12,7 @@ from Preprocessing.spectrogram_helper import normalize_spectrograms, transform_t
 def extract_150_melspectrograms(input_dir):
     spectrograms = []
     for _, _, files in os.walk(input_dir):
-        file_amount = 150
+        number_of_files = 150
         counter = 0
         for file in sorted(files, key=lambda x: int(x.strip('.wav'))):
             counter += 1
@@ -24,8 +24,8 @@ def extract_150_melspectrograms(input_dir):
 
             spectrograms.append(db_melspectrogram)
 
-            sys.stdout.write(f'\r Folder {input_dir}. extracted melspectrogram from file {counter}/{file_amount}')
-            if counter == file_amount:
+            sys.stdout.write(f'\r Folder {input_dir}. extracted melspectrogram from file {counter}/{number_of_files}')
+            if counter == number_of_files:
                 break
 
     print('')  # used to keep the last print from sys.stdout.write
@@ -45,7 +45,7 @@ def run_mimii_spectrogram_preprocessing(input_dir):
 def extract_features_150_files(input_dir):
     features = np.array([[[]]])
     for root, _, files in os.walk(input_dir):
-        file_amount = 150
+        number_of_files = 150
         counter = 0
         for file in sorted(files, key=lambda x: int(x.strip('.wav'))):
             counter += 1
@@ -57,8 +57,8 @@ def extract_features_150_files(input_dir):
             else:
                 features = np.vstack((features, [current_features]))
 
-            sys.stdout.write(f'\r Folder: {input_dir}, features extracted from file: {counter}/{file_amount}')
-            if counter == file_amount:
+            sys.stdout.write(f'\r Folder: {input_dir}, features extracted from file: {counter}/{number_of_files}')
+            if counter == number_of_files:
                 break
 
     print('')  # used to keep the last print from sys.stdout.write

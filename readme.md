@@ -36,7 +36,7 @@ For each model type, there is a directory containing the following files:
 - 'implementation.py' trains and saves two models in their base configuration, each model is tied to one of the datasets.
 - 'inference_hydropower.py' creates evaluation plots and prints the ROC_AUC score for the hydropower base model.
 - 'inference_mimii.py' the same for the MIMII base model
-- 'parameter_tuning.py' runs hyperparameter tuning for the amount of rounds specified within the specified parameter ranges and saves the models in the directory 'Models'. 
+- 'parameter_tuning.py' runs hyperparameter tuning for the number of rounds specified within the specified parameter ranges and saves the models in the directory 'Models'. 
 - 'runtime_analysis.py' measures the inference runtime for the specified models
 
 

@@ -11,7 +11,7 @@ from implementation import train_conv_ae
 
 
 def generate_random_parameters(parameter_ranges):
-    first_layer_filter_amount = random_power_of_two(parameter_ranges['first_layer_filter_amount'][0], parameter_ranges['first_layer_filter_amount'][1])
+    first_layer_number_of_filters = random_power_of_two(parameter_ranges['first_layer_number_of_filters'][0], parameter_ranges['first_layer_number_of_filters'][1])
 
     bottleneck_size = random_power_of_two(parameter_ranges['bottleneck_size'][0],
                                           parameter_ranges['bottleneck_size'][1])
@@ -19,14 +19,14 @@ def generate_random_parameters(parameter_ranges):
     batch_size = random_power_of_two(parameter_ranges['batch_size'][0], parameter_ranges['batch_size'][1])
     epochs = random.randrange(parameter_ranges['epochs'][0], parameter_ranges['epochs'][1], 5)
 
-    return first_layer_filter_amount, bottleneck_size, batch_size, epochs
+    return first_layer_number_of_filters, bottleneck_size, batch_size, epochs
 
 def random_parameter_tuning(parameter_ranges, rounds, dataset):
     for round in range(rounds):
         sys.stdout.write(f'\r Tuning {dataset} round: {round+1}/{rounds}')
 
-        first_layer_filter_amount, bottleneck_size, batch_size, epochs = generate_random_parameters(parameter_ranges)
-        autoencoder = train_conv_ae(first_layer_filter_amount, bottleneck_size, batch_size, epochs, dataset, verbose=False)
+        first_layer_number_of_filters, bottleneck_size, batch_size, epochs = generate_random_parameters(parameter_ranges)
+        autoencoder = train_conv_ae(first_layer_number_of_filters, bottleneck_size, batch_size, epochs, dataset, verbose=False)
         autoencoder.save(f'Models/{dataset}/' + str(round))
     print('')  # used to keep the last print from sys.stdout.write
 
@@ -40,7 +40,7 @@ def create_models_report(models_folder, report_file_path):
 
     with open(report_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Model', 'first_layer_filter_amount', 'bottleneck_size', 'batch_size', 'epochs', 'validation roc_auc_score'])
+        writer.writerow(['Model', 'first_layer_number_of_filters', 'bottleneck_size', 'batch_size', 'epochs', 'validation roc_auc_score'])
 
         for _, dirs, _ in os.walk(models_folder):
             counter = 0
@@ -52,25 +52,25 @@ def create_models_report(models_folder, report_file_path):
 
                 current_model = AutoencoderConvolutional.load(full_path)
 
-                filter_amounts, bottleneck_size = current_model.get_hyperparameters()
+                numbers_of_filters, bottleneck_size = current_model.get_hyperparameters()
                 batch_size, epochs = current_model.get_train_parameters()
                 auc_score = get_auc_validation_score_for_ae(current_model, dataset)
 
-                writer.writerow([dir, filter_amounts[0], bottleneck_size, batch_size, epochs, auc_score])
+                writer.writerow([dir, numbers_of_filters[0], bottleneck_size, batch_size, epochs, auc_score])
             print('') # used to keep the last print from sys.stdout.write
 
 
 
 if __name__ == '__main__':
     parameter_ranges = {
-        'first_layer_filter_amount': [4, 128],
+        'first_layer_number_of_filters': [4, 128],
         'bottleneck_size': [4, 128],
 
         'batch_size': [8, 128],
         'epochs': [5, 100]
     }
 
-    rounds = 100
+    rounds = 1
 
     random_parameter_tuning(parameter_ranges, rounds, dataset='Hydropower')
     create_models_report('Models/Hydropower', 'Models_report_hydropower_conv_ae.csv')

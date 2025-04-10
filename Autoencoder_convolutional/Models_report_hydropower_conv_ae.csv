@@ -1,5 +1,5 @@
-Model,first_layer_filter_amount,bottleneck_size,batch_size,epochs,validation roc_auc_score
-0,8,8,16,95,1.0
+Model,first_layer_number_of_filters,bottleneck_size,batch_size,epochs,validation roc_auc_score
+0,4,64,64,25,1.0
 1,64,8,8,25,1.0
 10,128,128,32,55,1.0
 11,16,8,128,20,0.9996543778801843

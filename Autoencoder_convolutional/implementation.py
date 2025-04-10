@@ -3,17 +3,17 @@ from autoencoder_convolutional import AutoencoderConvolutional
 import numpy as np
 
 
-def train_conv_ae(first_layer_filter_amount, bottleneck_size, batch_size, epochs, dataset, verbose=False):
+def train_conv_ae(first_layer_number_of_filters, bottleneck_size, batch_size, epochs, dataset, verbose=False):
     input_folder = f'../Spectrograms/{dataset}'
     normal_train_spectrograms = np.load(input_folder + '/normal_train_spectrograms.npy')
     normal_validation_spectrograms = np.load(input_folder + '/normal_validation_spectrograms.npy')
 
     autoencoder = AutoencoderConvolutional(
         input_shape=normal_train_spectrograms[0].shape,
-        filter_amounts=(
-            first_layer_filter_amount,
-            first_layer_filter_amount*2,
-            first_layer_filter_amount*4
+        numbers_of_filters=(
+            first_layer_number_of_filters,
+            first_layer_number_of_filters * 2,
+            first_layer_number_of_filters * 4
         ),
         filter_sizes=(3, 3, 3),
         strides=(2, 2, 2),

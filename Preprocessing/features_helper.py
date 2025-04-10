@@ -2,7 +2,7 @@ import librosa.feature
 import numpy as np
 import os
 import sys
-from constants import SAMPLE_RATE, HOP_LENGTH, FRAME_SIZE, MEL_AMOUNT
+from constants import SAMPLE_RATE, HOP_LENGTH, FRAME_SIZE, NUMBER_OF_MELS
 
 
 def extract_features_from_file(audio_path):
@@ -34,8 +34,8 @@ def extract_features_from_file(audio_path):
 
     feature_vectors = np.column_stack((rms_energy, spectral_centroid, spectral_bandwidth, spectral_contrast, spectral_flatness, spectral_rolloff, zero_crossing_rate))
 
-    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=SAMPLE_RATE, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH, n_mels=MEL_AMOUNT)
-    mfccs = librosa.feature.mfcc(S=librosa.power_to_db(melspectrogram), sr=SAMPLE_RATE, n_mfcc=MEL_AMOUNT)
+    melspectrogram = librosa.feature.melspectrogram(y=signal, sr=SAMPLE_RATE, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH, n_mels=NUMBER_OF_MELS)
+    mfccs = librosa.feature.mfcc(S=librosa.power_to_db(melspectrogram), sr=SAMPLE_RATE, n_mfcc=NUMBER_OF_MELS)
     mfccs = np.array(mfccs)
 
     for mfcc in mfccs:
@@ -48,7 +48,7 @@ def extract_features_from_folder(input_dir):
 
     features = np.array([[[]]])
     for root, _, files in os.walk(input_dir):
-        file_amount = len(files)
+        number_of_files = len(files)
         counter = 0
         for file in sorted(files, key=lambda x: int(x.strip('.wav'))):
             counter += 1
@@ -60,7 +60,7 @@ def extract_features_from_folder(input_dir):
             else:
                 features = np.vstack((features, [current_features]))
 
-            sys.stdout.write(f'\r Folder: {input_dir}, features extracted from file: {counter}/{file_amount}')
+            sys.stdout.write(f'\r Folder: {input_dir}, features extracted from file: {counter}/{number_of_files}')
 
 
     return features
