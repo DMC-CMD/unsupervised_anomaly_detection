@@ -2,6 +2,7 @@ import timeit
 import numpy as np
 import pickle
 
+from constants import HYDROPOWER_FEATURE_VALUES_PER_FILE, MIMII_FEATURE_VALUES_PER_FILE
 from evaluation_helper import frame_format_to_file_format
 
 def run_inference(input_file, som, feature_values_per_file):
@@ -26,14 +27,14 @@ if __name__ == "__main__":
     # load the specific autoencoders you want to use for the runtime analysis
     with open('Models/Hydropower/base_model/model.pkl', 'rb') as file:
         tuned_model_hydropower = pickle.load(file)
-    t = timeit.Timer(lambda : run_inference('../Features/Hydropower/normal_test_features.npy', tuned_model_hydropower, 64))
+    t = timeit.Timer(lambda : run_inference('../Features/Hydropower/normal_test_features.npy', tuned_model_hydropower, HYDROPOWER_FEATURE_VALUES_PER_FILE))
     r = t.repeat(executions, 1)
     print('Best runtime (s) to classify 150 Hydropower files with Self-Organizing Map : ', min(r))
 
 
     with open('Models/MIMII/5/model.pkl', 'rb') as file:
         tuned_model_mimii = pickle.load(file)
-    t = timeit.Timer(lambda: run_inference('../Features/MIMII/normal_test_features.npy', tuned_model_mimii, 862))
+    t = timeit.Timer(lambda: run_inference('../Features/MIMII/normal_test_features.npy', tuned_model_mimii, MIMII_FEATURE_VALUES_PER_FILE))
     r = t.repeat(executions, 1)
     print('Best runtime (s) to classify 150 MIMII files with Self-Organizing Map: ', min(r))
 

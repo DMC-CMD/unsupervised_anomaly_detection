@@ -12,7 +12,7 @@ def display_training_process(history, title):
     plt.ylabel('Reconstruction error')
     plt.xlabel('Epoch')
     plt.legend()
-    plt.show(dpi=300)
+    plt.show()
 
 def get_labels_and_reconstruction_errors(normal_spectrograms, anomaly_spectrograms, reconstructed_normals, reconstructed_anomalies):
     normal_spectrograms = transform_to_spectrogram(normal_spectrograms)
@@ -94,7 +94,7 @@ def frame_format_to_file_format(frame_features, feature_values_per_file):
         file = frame_features[i:i+feature_values_per_file]
         file_features.append(file)
 
-    return np.array(file_features)
+    return file_features
 
 def sort_labeled_data(true_labels, predicted_scores):
     labels_sorted = [x for _, x in sorted(zip(predicted_scores, true_labels))]

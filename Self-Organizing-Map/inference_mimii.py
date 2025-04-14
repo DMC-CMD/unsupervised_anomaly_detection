@@ -1,16 +1,17 @@
 import numpy as np
 import pickle
 
+from constants import MIMII_FEATURE_VALUES_PER_FILE
 from evaluation_helper import get_labels_and_quantization_errors, display_roc, \
-    get_auc_score, display_error_plot, frame_format_to_file_format, display_distance_map, display_hit_map
+    get_auc_score, display_error_plot, frame_format_to_file_format, display_distance_map
 
 with open('Models/MIMII/base_model/model.pkl', 'rb') as file:
     som = pickle.load(file)
 
 normal_test_features = np.load('../Features/MIMII/normal_test_features.npy')
-normal_test_samples = frame_format_to_file_format(normal_test_features, 862)
+normal_test_samples = frame_format_to_file_format(normal_test_features, MIMII_FEATURE_VALUES_PER_FILE)
 anomaly_test_features = np.load('../Features/MIMII/anomaly_test_features.npy')
-anomaly_test_samples = frame_format_to_file_format(anomaly_test_features, 862)
+anomaly_test_samples = frame_format_to_file_format(anomaly_test_features, MIMII_FEATURE_VALUES_PER_FILE)
 
 display_distance_map(som, 'Distance Map for MIMII model')
 

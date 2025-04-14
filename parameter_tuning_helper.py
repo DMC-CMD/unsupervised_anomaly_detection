@@ -17,15 +17,9 @@ def get_auc_validation_score_for_ae(autoencoder, dataset):
     auc_score = get_auc_score(labels, reconstruction_errors)
     return auc_score
 
-def get_auc_validation_score_for_som(som, dataset):
+def get_auc_validation_score_for_som(som, dataset, feature_values_per_file):
     normal_test = np.load(f'../Features/{dataset}/normal_validation_features.npy')
     anomaly_test = np.load(f'../Features/{dataset}/anomaly_validation_features.npy')
-
-    feature_values_per_file = 0
-    if dataset == 'Hydropower':
-        feature_values_per_file = 64
-    if dataset == 'MIMII':
-        feature_values_per_file = 862
 
     normal_test = frame_format_to_file_format(normal_test, feature_values_per_file)
     anomaly_test = frame_format_to_file_format(anomaly_test, feature_values_per_file)

@@ -5,6 +5,7 @@ import csv
 import pickle
 import math
 
+from constants import HYDROPOWER_FEATURE_VALUES_PER_FILE, MIMII_FEATURE_VALUES_PER_FILE
 from implementation import train_som, save_som
 from parameter_tuning_helper import get_auc_validation_score_for_som
 
@@ -33,11 +34,9 @@ def random_parameter_tuning(parameter_ranges, rounds, dataset):
     print('')  # used to keep the last print from sys.stdout.write
 
 
-def create_models_report(models_folder, report_file_path):
+def create_models_report(models_folder, report_file_path, dataset, feature_values_per_file):
     if os.path.exists(report_file_path):
         os.remove(report_file_path)
-
-    dataset = models_folder.replace('Models/', '')
 
     with open(report_file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
@@ -61,7 +60,7 @@ def create_models_report(models_folder, report_file_path):
                 learning_rate = current_parameters[2]
                 num_epochs = current_parameters[3]
 
-                auc_score = get_auc_validation_score_for_som(current_model, dataset)
+                auc_score = get_auc_validation_score_for_som(current_model, dataset, feature_values_per_file)
 
                 writer.writerow([dir, sidelength, sigma, learning_rate, num_epochs, auc_score])
             print('') # used to keep the last print from sys.stdout.write
@@ -76,11 +75,11 @@ if __name__ == '__main__':
 
     rounds = 100
 
-    #random_parameter_tuning(parameter_ranges, rounds,'Hydropower')
-    create_models_report('Models/Hydropower', 'Models_report_hydropower_som.csv')
+    random_parameter_tuning(parameter_ranges, rounds,'Hydropower')
+    create_models_report('Models/Hydropower', 'Models_report_hydropower_som.csv', 'Hydropower', HYDROPOWER_FEATURE_VALUES_PER_FILE)
 
-    #random_parameter_tuning(parameter_ranges, rounds, 'MIMII')
-    create_models_report('Models/MIMII', 'Models_report_mimii_som.csv')
+    random_parameter_tuning(parameter_ranges, rounds, 'MIMII')
+    create_models_report('Models/MIMII', 'Models_report_mimii_som.csv', 'MIMII', MIMII_FEATURE_VALUES_PER_FILE)
 
 
 

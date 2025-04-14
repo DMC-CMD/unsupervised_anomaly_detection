@@ -18,7 +18,7 @@ The project needs the following dependencies to be run:
 ## Datasets
 This source code uses two datasets to train and evaluate the implemented models. 
 The self-created hydropower dataset contains normal and anomalous sound samples stored in the HPP_dataset directory.
-Some of the following code files require additionally the MIMII dataset to be available in a folder called 'MIMII_dataset'. It was too big to be included in the repository due to GitHub's size limit of 2GB. It can be downloaded and included in a local repository: {TODO: INSERT LINK }
+Some of the following code files require additionally the MIMII dataset to be available in a folder called 'MIMII_dataset'. It was too big to be included in the repository due to GitHub's size limit of 2GB. It can be downloaded and included in a local repository: https://nextcloud.bruno-br.com/s/Z58WaZwMDqAfepb
 
 ## 1. Preprocessing
 - 'preprocessing.py' extracts features vectors and spectrograms from both datasets and stores them in the directories 'Features' and 'Spectrograms'
